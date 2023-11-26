@@ -4,35 +4,46 @@ const Formulario = ({}) => {
   const [nombre,setNombre] = useState('');
   const [email,setEmail] = useState('');
   const [direccion,setDireccion] = useState('');
+  const [mostrarPassword,setMostrarPassword] = useState(false);
 
   const [mostrarValores,setMostrarValores] = useState(false);
 
-  const [mostrarPassword,setMostrarPassword] = useState(false);
+
+  const [nombreValido,setNombreValido] = useState(false);
+  const [direccionValida,setDireccionValida] = useState(false);
+  const [emailValido,setEmailValido] = useState(false);
+
+  const [mostrarErrores,setMostrarErrores] =useState(false);
 
   const actualizarNombre = (e) => {
-    console.log(e.target.value)
     setNombre(e.target.value);
+    setNombreValido(e.target.value.length > 3)
   }
 
   const actualizarEmail = (e) => {
-    console.log(e.target.value)
     setEmail(e.target.value);
+    setEmailValido(/^\S+@\S+\.\S+$/.test(e.target.value))
   }
   const actualizarDireccion = (e) => {
-    console.log(e.target.value)
     setDireccion(e.target.value);
+    setDireccionValida(e.target.value.length > 3)
   }
 
   const enviarDatos = (event) => {
     event.preventDefault();
-
     setMostrarValores(true);
+    setMostrarErrores(!nombreValido || !direccionValida || !emailValido);
   }
 
   const actualizarEstado = (e) => {
     e.preventDefault();
     setMostrarPassword(!mostrarPassword)
   }
+
+  // let valor = 'paaao@gmail-asas.com.ar';
+  // let patron = /^\S+@\S+\.\S+$/
+  // \S => no espacios en blanco
+  // console.log(patron.test(valor))
 
   return(
     <div>
@@ -44,12 +55,14 @@ const Formulario = ({}) => {
               <label htmlFor="">Nombre</label>
               <input type="text" className='form-control' placeholder='Ingrese nombre' 
                       value={nombre} onChange={actualizarNombre}/>
+              {(mostrarErrores && !nombreValido) && <small className='text-danger'>Nombre no valido</small>}
             </div>
 
             <div className="form-group">
               <label htmlFor="">Email</label>
               <input type="email" className='form-control' placeholder='Ingrese email' 
                       value={email} onChange={actualizarEmail}/>
+              {(mostrarErrores && !emailValido) && <small className='text-danger'>Correo no valido</small>}
             </div>
 
             <div className="form-row d-flex">
@@ -63,6 +76,7 @@ const Formulario = ({}) => {
               <label htmlFor="">Dirección</label>
               <input type="text" className='form-control' placeholder='Ingrese dirección' 
                       value={direccion} onChange={actualizarDireccion}/>
+              {(mostrarErrores && !direccionValida) && <small className='text-danger'>Direccion no valido</small>}
             </div>
 
 
